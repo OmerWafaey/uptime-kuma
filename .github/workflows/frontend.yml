@@ -1,0 +1,29 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Step
+        run: echo "Building frontend..."
+
+      - name: Deploy to Frontend Server
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: 100.27.193.223
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /path/to/frontend
+            git pull
+            npm install
+            npm run build
+            pm2 restart app
